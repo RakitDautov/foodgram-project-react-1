@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: tests
     steps:
+      - run: cd backend
       - name: Check out the repo
         uses: actions/checkout@v2 # Проверяет доступность репозитория DockerHub для workflow
       - name: Set up Docker Buildx
