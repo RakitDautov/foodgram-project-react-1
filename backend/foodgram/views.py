@@ -48,7 +48,6 @@ class RecipeView(viewsets.ModelViewSet):
 
 
 class FavoriteView(APIView):
-    filter_class = FavoriteFilter
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     pagination_class = None
 
