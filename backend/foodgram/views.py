@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, action
 from rest_framework.views import APIView
 from . import models, serializers
-from .filters import IngredientFilter, RecipeFilter, FavoriteFilter
+from .filters import IngredientFilter, RecipeFilter
 from rest_framework.pagination import PageNumberPagination
 
 

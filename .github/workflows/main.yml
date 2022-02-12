@@ -54,12 +54,7 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             stack_file_name: docker-compose.yaml
             script: |
-              cd foodgram-project-react-1 
               sudo docker pull rocke215/infra_backend
               sudo docker-compose stop
               sudo docker-compose rm backend
               sudo docker-compose up --build
-              sudo docker-compose exec -T web python manage.py makemigrations users
-              sudo docker-compose exec -T web python manage.py makemigrations foodgram
-              sudo docker-compose exec -T web python manage.py migrate --no-input
-              sudo docker-compose exec -T web python manage.py collectstatic --no-input

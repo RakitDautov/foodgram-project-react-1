@@ -9,10 +9,17 @@ class RecipeFilter(filters.FilterSet):
         to_field_name='slug',
         queryset=Tag.objects.all()
     )
+    is_favorited = filters.CharFilter(method='get_is_favorited')
 
     class Meta:
         model = Recipe
-        fields = ['author', 'tags', ]
+        fields = ['author', 'tags', 'is_favorited']
+
+    def get_is_favorited(self, queryset, name, value):
+        user = self.request.user
+        if value:
+            return Recipe.objects.filter(favorite__user=user)
+        return Recipe.objects.all()
 
 
 class IngredientFilter(filters.FilterSet):
