@@ -14,10 +14,8 @@ services:
 
   backend:
     container_name: backend
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
     restart: always
+    image: rocke215/infra_backend
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
@@ -28,9 +26,7 @@ services:
 
   frontend:
     container_name: frontend
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: rocke215/infra_frontend
     volumes:
       - ../frontend/:/app/result_build/
 
