@@ -13,7 +13,6 @@ services:
       - ./.env
 
   backend:
-    container_name: backend
     restart: always
     image: rocke215/infra_backend
     volumes:
@@ -25,7 +24,6 @@ services:
       - ./.env
 
   frontend:
-    container_name: frontend
     image: rocke215/infra_frontend
     volumes:
       - ../frontend/:/app/result_build/
