@@ -58,6 +58,9 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name = 'Ингредиенты'
 
+    def __str__(self):
+        return self.name, self.measurement_unit
+
 
 class Recipe(models.Model):
     author = models.ForeignKey(

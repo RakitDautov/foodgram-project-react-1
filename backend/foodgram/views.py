@@ -31,7 +31,7 @@ class IngredientsView(viewsets.ModelViewSet):
 class RecipeView(viewsets.ModelViewSet):
     queryset = models.Recipe.objects.all()
     permissions = (IsAuthenticatedOrReadOnly,)
-    filter_backends = [DjangoFilterBackend, ]
+    #filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilter
     filterset_fields = ['author', 'tags']
     pagination_class = PageNumberPagination
@@ -50,8 +50,6 @@ class RecipeView(viewsets.ModelViewSet):
 class FavoriteView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     pagination_class = None
-    filter_class = RecipeFilter
-    filterset_fields = ['author', 'tags']
 
     def get_queryset(self):
         user = self.request.user
