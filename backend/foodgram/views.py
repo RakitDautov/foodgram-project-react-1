@@ -50,6 +50,8 @@ class RecipeView(viewsets.ModelViewSet):
 class FavoriteView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     pagination_class = None
+    filter_class = RecipeFilter
+    filterset_fields = ['author', 'tags']
 
     def get_queryset(self):
         user = self.request.user
