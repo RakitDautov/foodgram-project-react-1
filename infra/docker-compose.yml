@@ -2,6 +2,7 @@ version: '3.3'
 services:
   db:
     image: postgres:12.4
+    restart: always
     container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -32,6 +33,7 @@ services:
 
   nginx:
     image: nginx:1.19.3
+    restart: always
     container_name: nginx
     ports:
       - 80:80
