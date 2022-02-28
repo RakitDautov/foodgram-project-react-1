@@ -4,8 +4,8 @@ from django.db import models
 
 class User(AbstractUser):
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ('username',)
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ("username",)
 
     email = models.EmailField(max_length=254, unique=True)
     username = models.CharField(max_length=150, unique=True)
@@ -22,4 +22,4 @@ class Follow(models.Model):
     )
 
     class Meta:
-        unique_together = ('user', 'following')
+        unique_together = ("user", "following")
