@@ -1,15 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
-from rest_framework import status, mixins, viewsets, filters
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import status, viewsets
 from rest_framework.permissions import (
     IsAuthenticated,
     AllowAny,
-    IsAuthenticatedOrReadOnly,
 )
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .serializers import (
@@ -23,7 +21,7 @@ from .models import Follow
 User = get_user_model()
 
 
-class CustomUserViewSet(ModelViewSet):
+class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [
