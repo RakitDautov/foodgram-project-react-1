@@ -20,7 +20,6 @@ jobs:
           pip install flake8 pytest
           pip install -r requirements.txt
 
-
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
