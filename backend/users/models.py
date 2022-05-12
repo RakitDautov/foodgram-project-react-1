@@ -9,8 +9,8 @@ class User(AbstractUser):
 
     email = models.EmailField(max_length=254, unique=True)
     username = models.CharField(max_length=150, unique=True)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
 
 
 class Follow(models.Model):
