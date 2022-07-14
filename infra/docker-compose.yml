@@ -10,6 +10,7 @@ services:
       - ./.env
 
   backend:
+    container_name: backend
     restart: always
     build:
       context: ../backend
@@ -24,6 +25,7 @@ services:
       - ./.env
 
   frontend:
+    container_name: frontend
     build:
       context: ../frontend
     volumes:

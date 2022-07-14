@@ -188,7 +188,7 @@ def download_shopping_cart(request):
     wishlist = []
     for name, data in buying_list.items():
         wishlist.append(
-            f"{name} - {data['amount']} ({data['measurement_unit']}) \n"
+            f"{name} - {data['amount']} ({data['measurement_unit']})\n"
         )
     response = HttpResponse(wishlist, content_type="text/plain")
     return response
