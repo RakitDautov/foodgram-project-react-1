@@ -12,14 +12,14 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class IngredientInRecipeSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(
-        queryset=models.Ingredient.objects.all(),
+    id = serializers.ReadOnlyField(
+        source='ingredient.id',
     )
-    name = serializers.SlugRelatedField(
-        source="ingredient", read_only=True, slug_field="name"
+    name = serializers.ReadOnlyField(
+        source='ingredient.name',
     )
-    measurement_unit = serializers.SlugRelatedField(
-        source="ingredient", read_only=True, slug_field="measurement_unit"
+    measurement_unit = serializers.ReadOnlyField(
+        source='ingredient.measurement_unit',
     )
 
     class Meta:
@@ -101,6 +101,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Recipe
         fields = [
+            "id",
             "tags",
             "author",
             "ingredients",
@@ -130,15 +131,15 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, instance, validated_data):
+        ingredients_data = validated_data.pop("ingredients")
         tags_data = validated_data.pop("tags")
-        ingredient_data = validated_data.pop("ingredients")
         models.TagsInRecipe.objects.filter(recipe=instance).delete()
         models.IngredientInRecipe.objects.filter(recipe=instance).delete()
-        for new_ingredient in ingredient_data:
+        for ingredient in ingredients_data:
+            ingredient_model = ingredient["id"]
+            amount = ingredient["amount"]
             models.IngredientInRecipe.objects.create(
-                ingredient=new_ingredient["id"],
-                recipe=instance,
-                amount=new_ingredient["amount"],
+                ingredient=ingredient_model, recipe=instance, amount=amount
             )
         instance.name = validated_data.pop("name")
         instance.text = validated_data.pop("text")
