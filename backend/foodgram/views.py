@@ -38,13 +38,13 @@ class IngredientsView(viewsets.ModelViewSet):
 class RecipeView(viewsets.ModelViewSet):
     queryset = models.Recipe.objects.all()
     permissions = (IsAuthenticatedOrReadOnly,)
-    # filter_backends = [DjangoFilterBackend, ]
+    filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilter
-    filterset_fields = ["author", "tags"]
     pagination_class = PageNumberPagination
 
     def get_serializer_class(self):
-        if self.request.method == "POST":
+        method = self.request.method
+        if method == "POST" or method == "PATCH":
             return serializers.CreateRecipeSerializer
         return serializers.ShowRecipeSerializer
 
@@ -114,13 +114,9 @@ class ShoppingCartViewSet(APIView):
     ]
     pagination_class = None
 
-    def get_queryset(self):
-        user = self.request.user
-        return models.ShoppingCart.filter(user=user)
-
     @action(
         methods=[
-            "post",
+            "post"
         ],
         detail=True,
     )
@@ -131,7 +127,7 @@ class ShoppingCartViewSet(APIView):
             "recipe": recipe_id,
         }
         if models.ShoppingCart.objects.filter(
-            user=user, recipe__id=recipe_id
+                user=user, recipe__id=recipe_id
         ).exists():
             return Response(
                 {"Ошибка": "Уже есть в корзине"},
