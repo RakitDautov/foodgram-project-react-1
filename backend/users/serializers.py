@@ -1,9 +1,10 @@
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from . import models
-from foodgram.models import Recipe
+from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.authtoken.models import Token
+
+from . import models
+from foodgram.models import Recipe
 
 
 User = get_user_model()

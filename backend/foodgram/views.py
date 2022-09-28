@@ -10,6 +10,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, action
 from rest_framework.views import APIView
+
 from . import models, serializers
 from .filters import IngredientFilter, RecipeFilter
 
@@ -17,27 +18,23 @@ from .filters import IngredientFilter, RecipeFilter
 class TagView(viewsets.ModelViewSet):
     queryset = models.Tag.objects.all()
     serializer_class = serializers.TagSerializer
-    permissions = (AllowAny,)
+    permissions = [AllowAny, ]
     pagination_class = None
 
 
 class IngredientsView(viewsets.ModelViewSet):
     queryset = models.Ingredient.objects.all()
-    permission_classes = [
-        IsAuthenticatedOrReadOnly,
-    ]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
     serializer_class = serializers.IngredientSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-    ]
+    filter_backends = [DjangoFilterBackend, ]
     filter_class = IngredientFilter
-    search_fields = ("name",)
+    search_fields = ["name", ]
     pagination_class = None
 
 
 class RecipeView(viewsets.ModelViewSet):
     queryset = models.Recipe.objects.all()
-    permissions = (IsAuthenticatedOrReadOnly,)
+    permissions = [IsAuthenticatedOrReadOnly, ]
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilter
     pagination_class = PageNumberPagination
@@ -55,14 +52,7 @@ class RecipeView(viewsets.ModelViewSet):
 
 
 class FavoriteView(APIView):
-    permission_classes = [
-        IsAuthenticatedOrReadOnly,
-    ]
-    pagination_class = None
-
-    def get_queryset(self):
-        user = self.request.user
-        return models.Favorite.objects.filter(user=user)
+    permissions = [IsAuthenticatedOrReadOnly, ]
 
     @action(
         methods=[
@@ -109,9 +99,7 @@ class FavoriteView(APIView):
 
 class ShoppingCartViewSet(APIView):
 
-    permission_classes = [
-        IsAuthenticatedOrReadOnly,
-    ]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
     pagination_class = None
 
     @action(
@@ -184,7 +172,7 @@ def download_shopping_cart(request):
     wishlist = []
     for name, data in buying_list.items():
         wishlist.append(
-            f"{name} - {data['amount']} ({data['measurement_unit']})\n"
+            f"{name} - {data['amount']} {data['measurement_unit']}"
         )
     response = HttpResponse(wishlist, content_type="text/plain")
     return response

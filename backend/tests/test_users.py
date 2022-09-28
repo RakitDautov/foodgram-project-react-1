@@ -76,7 +76,7 @@ class ProfileTestCase(APITestCase):
 
     def test_subscriptions(self):
 
-        """Тест подписки на драгого пользователя"""
+        """Тест подписки на другого пользователя"""
 
         response = self.client.post("/api/users/subscribe/")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
