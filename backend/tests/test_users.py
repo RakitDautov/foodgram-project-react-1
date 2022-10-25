@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient, APITestCase
 
-from users.models import User
+from users.models import User, Follow
 
 
 class RegistrationTestCase(APITestCase):
@@ -25,44 +25,39 @@ class RegistrationTestCase(APITestCase):
 
     def test_auth(self):
 
-        """Тест получения токена по email и password
+        """Тест получения токена авторизации по email и password
         post('/auth/token/login/')"""
 
-        self.user = User.objects.create_user(
-            username=self.data["username"],
-            email=self.data["email"],
-            password=self.data["password"],
-        )
-
+        self.client.post("/api/users/", self.data)
         response = self.client.post("/api/auth/token/login/", self.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class ProfileTestCase(APITestCase):
 
-    def setUp(self):
-        self.user_1 = User.objects.create_user(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.user_1 = User.objects.create_user(
             username="user1",
             email="1@mail.ru",
             password="password",
         )
-        self.user_2 = User.objects.create_user(
+        cls.user_1.save()
+        cls.user_2 = User.objects.create_user(
             username="user2",
             email="2@mail.ru",
             password="password",
         )
-        self.token = Token.objects.create(user=self.user_1)
-        self.api_authentication()
+        cls.user_2.save()
+        cls.token = Token.objects.create(user=cls.user_1)
 
-    def api_authentication(self):
-
-        """Функция авторизует пользователя"""
-
+    def setUp(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_profile_information(self):
 
-        """Тест получения информации пользователя"""
+        """Тест получения информации пользователей"""
 
         profile_id = {
             "my_profile": "/api/users/me/",
@@ -78,5 +73,15 @@ class ProfileTestCase(APITestCase):
 
         """Тест подписки на другого пользователя"""
 
-        response = self.client.post("/api/users/subscribe/")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.client.post("/api/users/2/subscribe/")
+        count = self.client.get("/api/users/subscriptions/").data["count"]
+        self.assertEqual(count, 1)
+
+    def test_del_subscriptions(self):
+
+        """Тест удаления подписки на пользователя"""
+
+        self.client.post("/api/users/2/subscribe/")
+        self.client.delete("/api/users/2/subscribe/")
+        count = self.client.get("/api/users/subscriptions/").data["count"]
+        self.assertEqual(count, 0)
